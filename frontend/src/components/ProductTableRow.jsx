@@ -2,6 +2,7 @@ import { NavLink } from "react-router-dom";
 import {deleteProductById} from "../services/ApiService";
 import {useContext} from 'react';
 import {ProductContext} from "../context/ProductContext";
+import {formatCurrency} from "../utils/currency";
 
 export default function ProductTableRow ({id, title, price, quantity}) {
 
@@ -21,7 +22,7 @@ export default function ProductTableRow ({id, title, price, quantity}) {
     <tr>
       <th scope="row">{id}</th>
       <td>{title}</td>
-      <td>{price}</td>
+      <td>{formatCurrency(price)}</td>
       <td>{quantity}</td>
       <td>
         <div className="btn-group">

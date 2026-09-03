@@ -1,13 +1,16 @@
-import {useEffect, useContext} from "react";
+import {useEffect, useContext, useState} from "react";
 import {NavLink, useParams, useNavigate} from "react-router-dom";
 import {deleteProductById, getProductById} from "../services/ApiService";
 import {ProductContext} from "../context/ProductContext";
+import {formatCurrency} from "../utils/currency";
+import NotFound from "./NotFound";
 
 export default function ProductDetail() {
 
   const { id } = useParams();
   const { product, updateProduct, removeProductById } = useContext(ProductContext);
   const navigate = useNavigate();
+  const [notFound, setNotFound] = useState(false);
 
   useEffect(() => {
 
@@ -15,13 +18,17 @@ export default function ProductDetail() {
       try {
         const product = await getProductById(id);
         updateProduct(product);
-      } catch (error) {
-        console.error('Error fetching products:', error);
+      } catch {
+        setNotFound(true);
       }
     }
 
     fetchData();
   }, []);
+
+  if (notFound) {
+    return <NotFound />;
+  }
 
   async function deleteProduct() {
     try {
@@ -41,7 +48,7 @@ export default function ProductDetail() {
             <NavLink to="/">Products</NavLink>
           </li>
           <li className="breadcrumb-item">
-            <NavLink active to={`/${id}`}>{id}</NavLink>
+            <NavLink to={`/${id}`}>{id}</NavLink>
           </li>
         </ol>
       </nav>
@@ -54,7 +61,7 @@ export default function ProductDetail() {
         </tr>
         <tr>
           <th scope="row">Price</th>
-          <td>{product.price}</td>
+          <td>{formatCurrency(product.price)}</td>
         </tr>
         <tr>
           <th scope="row">Quantity</th>

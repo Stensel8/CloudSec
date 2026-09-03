@@ -27,9 +27,19 @@ public class ApiErrorController implements ErrorController {
         body.put("status", status.value());
         body.put("error", status.getReasonPhrase());
         body.put("path", request.getAttribute(RequestDispatcher.ERROR_REQUEST_URI));
-        body.put("message", "No endpoint here. The API lives under /api/products.");
+        body.put("message", messageFor(status));
 
         return ResponseEntity.status(status).body(body);
+    }
+
+    private String messageFor(HttpStatus status) {
+        if (status == HttpStatus.NOT_FOUND) {
+            return "No endpoint here. The API lives under /api/products.";
+        }
+        if (status == HttpStatus.BAD_REQUEST) {
+            return "The server couldn't process that request. Check that price and quantity are valid numbers.";
+        }
+        return "Something went wrong handling that request.";
     }
 
 }

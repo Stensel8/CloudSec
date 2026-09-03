@@ -1,5 +1,4 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import CreateProductForm from './components/CreateProductForm'
 import NavBar from "./components/NavBar";
@@ -8,6 +7,7 @@ import Products from "./components/Products";
 import { ProductListProvider } from "./context/ProductContext";
 import ProductDetail from "./components/ProductDetail";
 import UpdateProductForm from './components/UpdateProductForm';
+import NotFound from './components/NotFound';
 
 function App() {
   return (
@@ -23,6 +23,7 @@ function App() {
               <Route path=":id" element={<ProductDetail />} />
               <Route path=":id/edit" element={<UpdateProductForm />} />
             </Route>
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </div>
       </ProductListProvider>

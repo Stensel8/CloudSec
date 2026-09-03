@@ -1,22 +1,27 @@
-import {useContext, useEffect} from "react";
+import {useContext, useEffect, useState} from "react";
 import {getProductById, updateProductById} from "../services/ApiService";
 import {NavLink, useNavigate, useParams} from 'react-router-dom';
 import {ProductContext} from "../context/ProductContext";
+import {blockNonNumericKeys} from "../utils/numericInput";
+import NotFound from "./NotFound";
 
 export default function UpdateProductForm() {
 
   const { id } = useParams();
   const navigate = useNavigate();
   const {product, updateProduct} = useContext(ProductContext);
+  const [error, setError] = useState(null);
+  const [notFound, setNotFound] = useState(false);
 
   async function update(target) {
     target.preventDefault();
+    setError(null);
 
     try {
       const response = await updateProductById(id, product);
       navigate(`/${response.id}`);
     } catch (error) {
-      console.error('Error', error);
+      setError(error.response?.data?.message || error.response?.data?.error || 'Could not save the product. Check your input and try again.');
     }
   }
 
@@ -26,13 +31,17 @@ export default function UpdateProductForm() {
       try {
         const product = await getProductById(id);
         updateProduct(product);
-      } catch (error) {
-        console.error('Error fetching products:', error);
+      } catch {
+        setNotFound(true);
       }
     }
 
     fetchData();
   }, []);
+
+  if (notFound) {
+    return <NotFound />;
+  }
 
   const handleChange = (event) => {
     const { id, value } = event.target;
@@ -60,14 +69,15 @@ export default function UpdateProductForm() {
             <NavLink to="/">Products</NavLink>
           </li>
           <li className="breadcrumb-item">
-            <NavLink active to={`/${id}`}>{id}</NavLink>
+            <NavLink to={`/${id}`}>{id}</NavLink>
           </li>
           <li className="breadcrumb-item active">
-            <NavLink active to={`/${id}/edit`}>edit</NavLink>
+            <NavLink to={`/${id}/edit`}>edit</NavLink>
           </li>
         </ol>
       </nav>
       <form>
+        {error && <div className="alert alert-danger" role="alert">{error}</div>}
         <div className="mb-3 mt-5">
           <label htmlFor="title" className="form-label">Title</label>
           <input onChange={handleChange} value={product.title} type="text" className="form-control" id="title" aria-describedby="titleHelp" />
@@ -78,11 +88,14 @@ export default function UpdateProductForm() {
           <div className="row">
             <div className="col-6">
               <label htmlFor="price" className="form-label">Price</label>
-              <input onChange={handleChange} value={product.price} type="number" className="form-control" id="price" />
+              <div className="input-group">
+                <span className="input-group-text">€</span>
+                <input onChange={handleChange} onKeyDown={blockNonNumericKeys} value={product.price} type="number" min="0" step="0.01" className="form-control" id="price" />
+              </div>
             </div>
             <div className="col-6">
               <label htmlFor="quantity" className="form-label">Quantity</label>
-              <input onChange={handleChange} value={product.quantity} type="number" className="form-control" id="quantity" />
+              <input onChange={handleChange} onKeyDown={blockNonNumericKeys} value={product.quantity} type="number" min="0" step="1" className="form-control" id="quantity" />
             </div>
           </div>
 

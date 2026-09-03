@@ -12,6 +12,10 @@ RUN npm install
 # Copy the rest of the application code
 COPY . .
 
+# Override the committed .env value at build time if needed (CRA bakes REACT_APP_* vars in at build, not at runtime)
+ARG REACT_APP_API_BASE_URL=http://application-lb.student.com:8080
+ENV REACT_APP_API_BASE_URL=${REACT_APP_API_BASE_URL}
+
 # Build the React app
 RUN npm run build
 

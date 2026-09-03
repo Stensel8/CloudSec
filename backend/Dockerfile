@@ -1,18 +1,20 @@
-# Use the official Maven image as the base image
-FROM maven:3.8.5-openjdk-17 AS build
+# Use GraalVM 25 for building the application
+FROM ghcr.io/graalvm/jdk-community:25 AS build
 
 # Set the working directory
 WORKDIR /app
 
-# Copy the pom.xml and any other necessary configuration files
-COPY ./pom.xml /app
+# Copy the Maven wrapper, project configuration, and source files
+COPY ./.mvn /app/.mvn
+COPY ./mvnw /app/mvnw
+COPY ./pom.xml /app/pom.xml
 COPY ./src /app/src
 
 # Build the application
-RUN mvn clean package -Dmaven.test.skip=true
+RUN chmod +x /app/mvnw && /app/mvnw clean package -Dmaven.test.skip=true
 
-# Create a new image for running the application
-FROM eclipse-temurin:17-jdk
+# Create a new image for running the application on GraalVM 25
+FROM ghcr.io/graalvm/jdk-community:25
 
 # Set the working directory
 WORKDIR /app

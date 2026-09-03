@@ -14,7 +14,7 @@
     <name>Lab12-Backend</name>
     <description>Lab12-Backend</description>
     <properties>
-        <java.version>17</java.version>
+        <java.version>25</java.version>
     </properties>
     <dependencies>
         <dependency>

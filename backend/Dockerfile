@@ -12,7 +12,7 @@ COPY ./src /app/src
 RUN mvn clean package -Dmaven.test.skip=true
 
 # Create a new image for running the application
-FROM eclipse-temurin:17-jdk
+FROM eclipse-temurin:25-jdk
 
 # Set the working directory
 WORKDIR /app

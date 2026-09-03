@@ -12,6 +12,10 @@ RUN npm install
 # Copy the rest of the application code
 COPY . .
 
+# Override the committed .env value at build time if needed (Vite bakes VITE_* vars in at build, not at runtime)
+ARG VITE_API_BASE_URL=http://application-lb.student.com:8080
+ENV VITE_API_BASE_URL=${VITE_API_BASE_URL}
+
 # Build the React app
 RUN npm run build
 
@@ -22,7 +26,7 @@ FROM nginx:1.31.5
 COPY .docker/nginx.conf /etc/nginx/nginx.conf
 
 # Copy the built React app from the build stage to the nginx container
-COPY --from=build /app/build /usr/share/nginx/html
+COPY --from=build /app/dist /usr/share/nginx/html
 
 # Expose port 80
 EXPOSE 80

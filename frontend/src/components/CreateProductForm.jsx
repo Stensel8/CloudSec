@@ -1,4 +1,4 @@
-import React, {useContext, useRef} from "react";
+import {useContext, useRef} from "react";
 import {createProduct} from "../services/ApiService";
 import {useNavigate} from'react-router-dom';
 import {ProductContext} from "../context/ProductContext";

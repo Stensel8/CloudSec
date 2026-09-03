@@ -1,4 +1,4 @@
-import React, {useEffect, useContext} from "react";
+import {useEffect, useContext} from "react";
 import {NavLink, useParams, useNavigate} from "react-router-dom";
 import {deleteProductById, getProductById} from "../services/ApiService";
 import {ProductContext} from "../context/ProductContext";

@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from 'react';
+import {useContext, useEffect} from 'react';
 import ProductTableRow from "./ProductTableRow";
 import { ProductContext } from "../context/ProductContext";
 import { getProducts } from "../services/ApiService"

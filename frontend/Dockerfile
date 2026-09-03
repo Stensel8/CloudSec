@@ -16,7 +16,7 @@ COPY . .
 RUN npm run build
 
 # Serve stage
-FROM nginx:1.25.1
+FROM nginx:1.31.5
 
 # Copy the custom nginx.conf file to the container
 COPY .docker/nginx.conf /etc/nginx/nginx.conf

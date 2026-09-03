@@ -1,5 +1,5 @@
 # Use GraalVM 25 for building the application
-FROM ghcr.io/graalvm/jdk-community:25 AS build
+FROM ghcr.io/graalvm/jdk-community:25@sha256:a3bdba6a313cddc89f7e1b2649140e898c68ba356994a9c317b96b01bcb9f982 AS build
 
 # Set the working directory
 WORKDIR /app
@@ -14,7 +14,7 @@ COPY ./src /app/src
 RUN chmod +x /app/mvnw && /app/mvnw clean package -Dmaven.test.skip=true
 
 # Create a new image for running the application on GraalVM 25
-FROM ghcr.io/graalvm/jdk-community:25
+FROM ghcr.io/graalvm/jdk-community:25@sha256:a3bdba6a313cddc89f7e1b2649140e898c68ba356994a9c317b96b01bcb9f982
 
 # Set the working directory
 WORKDIR /app

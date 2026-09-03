@@ -1,5 +1,5 @@
 # Build stage
-FROM node:26@sha256:f5d1cc40abc10c2843339a2134d07817cf33c405cb16bfd052b0ed790254c3a3 AS build
+FROM node:26-alpine@sha256:2d984a15c9b54fd0aeb608b8e0d0d83529eb34d2966db27a1fb4f1edc3d298a3 AS build
 
 WORKDIR /app
 
@@ -20,7 +20,7 @@ ENV VITE_API_BASE_URL=${VITE_API_BASE_URL}
 RUN npm run build
 
 # Serve stage
-FROM nginx:1.31.5@sha256:05b8cb60c354a44ab824ea6e7dc69b46d50762cdbe728a347a5b656e6fb3d7c4
+FROM nginx:1.31.5-alpine@sha256:34f40471dea485273c5e2a04dd5e97a682332ceb4a9adecd67de450dcb2fb390
 
 # Copy the custom nginx.conf file to the container
 COPY .docker/nginx.conf /etc/nginx/nginx.conf

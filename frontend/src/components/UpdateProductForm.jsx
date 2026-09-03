@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useRef} from "react";
+import {useContext, useEffect} from "react";
 import {getProductById, updateProductById} from "../services/ApiService";
 import {NavLink, useNavigate, useParams} from 'react-router-dom';
 import {ProductContext} from "../context/ProductContext";

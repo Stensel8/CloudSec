@@ -24,6 +24,7 @@ export default function ProductTableRow ({id, title, price, quantity}) {
       <td>{title}</td>
       <td>{formatCurrency(price)}</td>
       <td>{quantity}</td>
+      <td>{formatCurrency(price * quantity)}</td>
       <td>
         <div className="btn-group">
           <NavLink className="btn btn-info" to={`/${id}`}>View</NavLink>

@@ -26,18 +26,25 @@ export default function UpdateProductForm() {
   }
 
   useEffect(() => {
+    let cancelled = false;
 
     async function fetchData() {
       try {
         const product = await getProductById(id);
-        updateProduct(product);
+        if (!cancelled) {
+          updateProduct(product);
+          setNotFound(false);
+        }
       } catch {
-        setNotFound(true);
+        if (!cancelled) {
+          setNotFound(true);
+        }
       }
     }
 
     fetchData();
-  }, []);
+    return () => { cancelled = true; };
+  }, [id]);
 
   if (notFound) {
     return <NotFound />;

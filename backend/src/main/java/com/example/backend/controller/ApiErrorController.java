@@ -22,12 +22,17 @@ public class ApiErrorController implements ErrorController {
                 ? HttpStatus.valueOf(Integer.parseInt(statusCode.toString()))
                 : HttpStatus.INTERNAL_SERVER_ERROR;
 
+        Object upstreamMessage = request.getAttribute(RequestDispatcher.ERROR_MESSAGE);
+        String message = (upstreamMessage != null && !upstreamMessage.toString().isBlank())
+                ? upstreamMessage.toString()
+                : messageFor(status);
+
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", Instant.now().toString());
         body.put("status", status.value());
         body.put("error", status.getReasonPhrase());
         body.put("path", request.getAttribute(RequestDispatcher.ERROR_REQUEST_URI));
-        body.put("message", messageFor(status));
+        body.put("message", message);
 
         return ResponseEntity.status(status).body(body);
     }

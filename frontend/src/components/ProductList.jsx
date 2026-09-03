@@ -37,6 +37,7 @@ export default function ProductList() {
           <th scope="col">Title</th>
           <th scope="col">Price</th>
           <th scope="col">Quantity</th>
+          <th scope="col">Total</th>
           <th scope="col">Actions</th>
         </tr>
         </thead>

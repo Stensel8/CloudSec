@@ -13,18 +13,25 @@ export default function ProductDetail() {
   const [notFound, setNotFound] = useState(false);
 
   useEffect(() => {
+    let cancelled = false;
 
     async function fetchData() {
       try {
         const product = await getProductById(id);
-        updateProduct(product);
+        if (!cancelled) {
+          updateProduct(product);
+          setNotFound(false);
+        }
       } catch {
-        setNotFound(true);
+        if (!cancelled) {
+          setNotFound(true);
+        }
       }
     }
 
     fetchData();
-  }, []);
+    return () => { cancelled = true; };
+  }, [id]);
 
   if (notFound) {
     return <NotFound />;
@@ -66,6 +73,10 @@ export default function ProductDetail() {
         <tr>
           <th scope="row">Quantity</th>
           <td>{product.quantity}</td>
+        </tr>
+        <tr>
+          <th scope="row">Total</th>
+          <td>{formatCurrency(product.price * product.quantity)}</td>
         </tr>
         </tbody>
       </table>

@@ -1,5 +1,4 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import CreateProductForm from './components/CreateProductForm'
 import NavBar from "./components/NavBar";

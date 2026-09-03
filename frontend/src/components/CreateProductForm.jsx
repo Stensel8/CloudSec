@@ -1,7 +1,8 @@
-import {useContext, useRef} from "react";
+import {useContext, useRef, useState} from "react";
 import {createProduct} from "../services/ApiService";
 import {useNavigate} from'react-router-dom';
 import {ProductContext} from "../context/ProductContext";
+import {blockNonNumericKeys} from "../utils/numericInput";
 
 export default function CreateProductForm() {
 
@@ -9,11 +10,13 @@ export default function CreateProductForm() {
   const titleRef = useRef();
   const priceRef = useRef();
   const quantityRef = useRef();
+  const [error, setError] = useState(null);
 
   const {addProduct} = useContext(ProductContext);
 
   async function add(target) {
     target.preventDefault();
+    setError(null);
 
     try {
 
@@ -23,20 +26,18 @@ export default function CreateProductForm() {
         quantity: quantityRef.current.value
       };
 
-      console.log(newProduct)
-
       const response = await createProduct(newProduct);
-      console.log(response)
       addProduct(response);
       navigate(`/${response.id}`);
 
     } catch (error) {
-      console.error('Error', error);
+      setError(error.response?.data?.message || error.response?.data?.error || 'Could not save the product. Check your input and try again.');
     }
   }
 
   return(
     <form>
+      {error && <div className="alert alert-danger" role="alert">{error}</div>}
       <div className="mb-3 mt-5">
         <label htmlFor="title" className="form-label">Title</label>
         <input ref={titleRef} type="text" className="form-control" id="title" aria-describedby="titleHelp" />
@@ -47,11 +48,14 @@ export default function CreateProductForm() {
         <div className="row">
           <div className="col-6">
             <label htmlFor="price" className="form-label">Price</label>
-            <input ref={priceRef} type="number" className="form-control" id="price" />
+            <div className="input-group">
+              <span className="input-group-text">€</span>
+              <input ref={priceRef} type="number" min="0" step="0.01" onKeyDown={blockNonNumericKeys} className="form-control" id="price" />
+            </div>
           </div>
           <div className="col-6">
             <label htmlFor="quantity" className="form-label">Quantity</label>
-            <input ref={quantityRef} type="number" className="form-control" id="quantity" />
+            <input ref={quantityRef} type="number" min="0" step="1" onKeyDown={blockNonNumericKeys} className="form-control" id="quantity" />
           </div>
         </div>
 

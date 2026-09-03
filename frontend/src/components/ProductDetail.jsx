@@ -2,6 +2,7 @@ import {useEffect, useContext} from "react";
 import {NavLink, useParams, useNavigate} from "react-router-dom";
 import {deleteProductById, getProductById} from "../services/ApiService";
 import {ProductContext} from "../context/ProductContext";
+import {formatCurrency} from "../utils/currency";
 
 export default function ProductDetail() {
 
@@ -41,7 +42,7 @@ export default function ProductDetail() {
             <NavLink to="/">Products</NavLink>
           </li>
           <li className="breadcrumb-item">
-            <NavLink active to={`/${id}`}>{id}</NavLink>
+            <NavLink to={`/${id}`}>{id}</NavLink>
           </li>
         </ol>
       </nav>
@@ -54,7 +55,7 @@ export default function ProductDetail() {
         </tr>
         <tr>
           <th scope="row">Price</th>
-          <td>{product.price}</td>
+          <td>{formatCurrency(product.price)}</td>
         </tr>
         <tr>
           <th scope="row">Quantity</th>

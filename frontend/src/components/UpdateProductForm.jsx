@@ -3,6 +3,7 @@ import {getProductById, updateProductById} from "../services/ApiService";
 import {NavLink, useNavigate, useParams} from 'react-router-dom';
 import {ProductContext} from "../context/ProductContext";
 import {blockNonNumericKeys} from "../utils/numericInput";
+import NotFound from "./NotFound";
 
 export default function UpdateProductForm() {
 
@@ -10,6 +11,7 @@ export default function UpdateProductForm() {
   const navigate = useNavigate();
   const {product, updateProduct} = useContext(ProductContext);
   const [error, setError] = useState(null);
+  const [notFound, setNotFound] = useState(false);
 
   async function update(target) {
     target.preventDefault();
@@ -29,13 +31,17 @@ export default function UpdateProductForm() {
       try {
         const product = await getProductById(id);
         updateProduct(product);
-      } catch (error) {
-        console.error('Error fetching products:', error);
+      } catch {
+        setNotFound(true);
       }
     }
 
     fetchData();
   }, []);
+
+  if (notFound) {
+    return <NotFound />;
+  }
 
   const handleChange = (event) => {
     const { id, value } = event.target;
